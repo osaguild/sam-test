@@ -7,7 +7,9 @@ Description: >
   
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Parameters:
-  Env:
+  Env1:
+    Type: String
+  Env2:
     Type: String
 
 Globals:
@@ -16,7 +18,8 @@ Globals:
     MemorySize: 128
     Environment:
       Variables:
-        ENV: !Ref Env
+        ENV1: !Ref Env1
+        ENV2: !Ref Env2
 
 Resources:
   HelloWorldFunction:

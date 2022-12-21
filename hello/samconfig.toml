@@ -11,5 +11,6 @@ image_repositories = [
     "HelloWorldFunction=249867148599.dkr.ecr.ap-northeast-1.amazonaws.com/hello5d41402a/helloworldfunction19d43fc4repo"
 ]
 parameter_overrides = [
-  "Env=stg"
+  "Env1=stg",
+  "Env2=prd"
 ]
