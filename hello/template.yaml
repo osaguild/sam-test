@@ -7,9 +7,11 @@ Description: >
   
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Parameters:
-  Env1:
+  LambdaId:
     Type: String
-  Env2:
+  LambdaSecret:
+    Type: String
+  SqsUrl:
     Type: String
 
 Globals:
@@ -18,8 +20,9 @@ Globals:
     MemorySize: 128
     Environment:
       Variables:
-        ENV1: !Ref Env1
-        ENV2: !Ref Env2
+        LAMBDA_ID: !Ref LambdaId
+        LAMBDA_SECRET: !Ref LambdaSecret
+        SQS_URL: !Ref SqsUrl
 
 Resources:
   HelloWorldFunction:
