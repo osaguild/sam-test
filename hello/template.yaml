@@ -13,6 +13,12 @@ Parameters:
     Type: String
   SqsUrl:
     Type: String
+  MysqlUser:
+    Type: String
+  MysqlPassword:
+    Type: String
+  MysqlUrl:
+    Type: String
 
 Globals:
   Function:
@@ -23,6 +29,9 @@ Globals:
         LAMBDA_ID: !Ref LambdaId
         LAMBDA_SECRET: !Ref LambdaSecret
         SQS_URL: !Ref SqsUrl
+        MYSQL_USER: !Ref MysqlUser
+        MYSQL_PASSWORD: !Ref MysqlPassword
+        MYSQL_URL: !Ref MysqlUrl
 
 Resources:
   HelloWorldFunction:

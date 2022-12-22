@@ -1,4 +1,5 @@
 import * as aws from "aws-sdk";
+import { createConnection } from "mysql2/promise";
 
 const queueUrl = `${process.env.SQS_URL}/add-wallet`;
 aws.config.update({
@@ -92,4 +93,36 @@ const receive = async (event: any, context: any) => {
   return response;
 };
 
-export { send, receive };
+const query = async () => {
+  const connection = await createConnection({
+    host: process.env.MYSQL_URL,
+    database: "soroban",
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+  });
+  await connection.connect();
+  const [rows, fields] = await connection.query("select count(*) from User");
+  connection.end();
+  return rows;
+};
+
+const select = async (event: any, context: any) => {
+  console.log("id:", process.env.LAMBDA_ID, "/ secret:", process.env.LAMBDA_SECRET);
+  let response;
+  try {
+    const count = await query();
+    response = {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: `selected count of user from rds. count: ${JSON.stringify(count)}`,
+      }),
+    };
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+
+  return response;
+};
+
+export { send, receive, select };

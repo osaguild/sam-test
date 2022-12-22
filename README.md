@@ -8,5 +8,5 @@ test for aws-sam
 - [x] use multiple env 
 - [x] send message to sqs
 - [x] receive message from sqs
-- [ ] use rds
+- [x] use rds
 

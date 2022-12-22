@@ -5,4 +5,4 @@ COPY app.ts package*.json ./
 RUN npm install
 RUN npx esbuild app.ts --platform=node --bundle --outdir=./
 
-CMD ["app.receive"]
+CMD ["app.select"]
