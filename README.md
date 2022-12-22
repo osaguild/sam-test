@@ -6,6 +6,7 @@ test for aws-sam
 - [x] use typescript
 - [x] use env 
 - [x] use multiple env 
-- [ ] use sqs
+- [x] send message to sqs
+- [x] receive message from sqs
 - [ ] use rds
 

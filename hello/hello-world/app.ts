@@ -31,21 +31,19 @@ const sendMessage = async () => {
     QueueUrl: queueUrl,
   };
   const result = await sqs.sendMessage(params).promise();
-  console.log("result", result);
 
   return result["MessageId"] as string;
 };
 
-const lambdaHandler = async (event: any, context: any) => {
-  console.log("id", process.env.AWS_ACCESS_KEY_ID);
-  console.log("secret", process.env.AWS_SECRET_ACCESS_KEY);
+const send = async (event: any, context: any) => {
+  console.log("id:", process.env.LAMBDA_ID, "/ secret:", process.env.LAMBDA_SECRET);
   let response;
   try {
     const messageId = await sendMessage();
     response = {
       statusCode: 200,
       body: JSON.stringify({
-        message: `hello world with sqs. messageId: ${messageId}`,
+        message: `sent message to sqs. messageId: ${messageId}`,
       }),
     };
   } catch (err) {
@@ -56,4 +54,42 @@ const lambdaHandler = async (event: any, context: any) => {
   return response;
 };
 
-export { lambdaHandler };
+const receiveMessage = async () => {
+  const receiveParams = {
+    QueueUrl: queueUrl,
+    MaxNumberOfMessages: 1,
+    WaitTimeSeconds: 1,
+    MessageAttributeNames: ["Title", "Author", "WeeksOn"],
+  };
+  const result = await sqs.receiveMessage(receiveParams).promise();
+  const message = (result.Messages as aws.SQS.Message[])[0];
+
+  const deleteParams = {
+    QueueUrl: queueUrl,
+    ReceiptHandle: message.ReceiptHandle as string,
+  };
+  await sqs.deleteMessage(deleteParams).promise();
+
+  return message;
+};
+
+const receive = async (event: any, context: any) => {
+  console.log("id:", process.env.LAMBDA_ID, "/ secret:", process.env.LAMBDA_SECRET);
+  let response;
+  try {
+    const message = await receiveMessage();
+    response = {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: `received message from sqs. message: ${JSON.parse(message.Body as string).message}`,
+      }),
+    };
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+
+  return response;
+};
+
+export { send, receive };
